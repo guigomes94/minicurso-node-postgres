@@ -2,6 +2,8 @@
 
 CREATE DATABASE musicfy;
 
+\c musicfy
+
 CREATE TABLE artist (
     idArtist serial,
     name varchar(30) not null,
