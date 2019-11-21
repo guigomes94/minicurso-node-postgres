@@ -5,12 +5,11 @@ import ArtistController from "./controllers/ArtistController";
 const routes = new Router();
 
 //CRUD (Create, Read, Update, Delete)
-// (/)
 routes.get("/", (req, res) => {
   return res.json({ info: 'RESTful API Node.js + Express + Postgres'})
 });
 
-// (/artist)
+// artist
 routes.get("/artist", ArtistController.index);
 routes.get("/artist/:id", ArtistController.show);
 routes.post("/artist", ArtistController.store);
