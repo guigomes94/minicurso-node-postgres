@@ -7,7 +7,7 @@ class GenderController {
       const result = await GenderRepository.findAll();
       return res.json(result);
     } catch(e) {
-      return res.json({message: e.message});
+      return res.status(404).json({message: e.message});
     }
     
   }
@@ -18,7 +18,7 @@ class GenderController {
       const result = await GenderRepository.findById(id);
       return res.json(result);
     } catch(e) {
-      return res.json({message: e.message});
+      return res.status(404).json({message: e.message});
     }
   }
 
@@ -28,7 +28,7 @@ class GenderController {
       const result = await GenderRepository.create(name);
       return res.json(result);
     } catch(e) {
-      return res.json({message: e.message});
+      return res.status(404).json({message: e.message});
     }
 
   }
@@ -41,7 +41,7 @@ class GenderController {
       const result = await GenderRepository.findOneAndUpdate(id, name);
       return res.json(result);
     } catch(e) {
-      return res.json({message: e.message});
+      return res.status(404).json({message: e.message});
     }
   }
 
@@ -52,7 +52,7 @@ class GenderController {
       const result = await GenderRepository.findOneAndDelete(id);
       return res.json(result);
     } catch(e) {
-      return res.json({message: e.message});
+      return res.status(404).json({message: e.message});
     }
   }
 

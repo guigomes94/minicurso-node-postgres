@@ -1,4 +1,5 @@
 import pool from '../config/conn';
+import Constants from '../utils/Constants';
 
 export default class GenderRepository {
     static async findAll() {
@@ -13,7 +14,7 @@ export default class GenderRepository {
     static async create(name) {
         try {
             const result =  await pool.query("INSERT INTO gender(name) VALUES($1) RETURNING *", [name]);
-            return result.rows[0];
+            return result.rows.length > 0 ? result.rows[0] : {};
         } catch(e) {
             throw e;
         }
@@ -28,7 +29,7 @@ export default class GenderRepository {
             if (result.rows.length > 0) {
                 return result.rows[0];
             } else {
-                throw new Error("Id does not exist");
+                throw new Error(Constants.ID_NOT_FOUND);
             }
         } catch (e) {
             throw e;
@@ -62,7 +63,7 @@ export default class GenderRepository {
             if (result.rows.length > 0){
                 return result.rows[0]
             } else {
-                throw new Error("Id does not exist");
+                throw new Error(Constants.ID_NOT_FOUND);
             }
         } catch(e) {
             throw e;
@@ -79,7 +80,7 @@ export default class GenderRepository {
             if (result.rows.length > 0){
                 return result.rows[0]
             } else {
-                throw new Error("Id does not exist");
+                throw new Error(Constants.ID_NOT_FOUND);
             }
         } catch(e) {
             throw e;

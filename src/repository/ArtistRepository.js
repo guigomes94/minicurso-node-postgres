@@ -1,4 +1,5 @@
 import pool from '../config/conn';
+import Constants from '../utils/Constants';
 
 export default class ArtistModel {
     /**
@@ -23,7 +24,7 @@ export default class ArtistModel {
             if (result.rows.length > 0) {
                 return result.rows[0];
             } else {
-                throw new Error("Id does not exist");
+                throw new Error(Constants.ID_NOT_FOUND);
             }
         } catch(e) {
             throw e;
@@ -39,7 +40,7 @@ export default class ArtistModel {
             if (result.rows.length > 0) {
                 return result.rows;
             } else {
-                throw new Error("Name does not exist");
+                throw new Error(Constants.NAME_NOT_FOUND);
             }
         } catch(e) {
             throw e;
@@ -53,7 +54,7 @@ export default class ArtistModel {
     static async create(name) {
         try {
             const result = await pool.query("INSERT INTO artist(name) VALUES($1) RETURNING *", [name]);
-            return result.rows.length > 0 ? result.rows[0] : [];
+            return result.rows.length > 0 ? result.rows[0] : {};
         } catch(e) {
             throw e;
         }
@@ -70,7 +71,7 @@ export default class ArtistModel {
             if (result.rows.length > 0){
                 return result.rows[0]
             } else {
-                throw new Error("Id does not exist");
+                throw new Error(Constants.ID_NOT_FOUND);
             }
         } catch(e) {
             throw e;
@@ -87,7 +88,7 @@ export default class ArtistModel {
             if (result.rows.length > 0){
                 return result.rows[0]
             } else {
-                throw new Error("Id does not exist");
+                throw new Error(Constants.ID_NOT_FOUND);
             }
         } catch(e) {
             throw e;

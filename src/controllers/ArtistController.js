@@ -7,7 +7,7 @@ class ArtistController {
       const result = await ArtistModel.findAll();
       return res.json(result);
     } catch(e) {
-      return res.json({message: e.message});
+      return res.status(404).json({message: e.message});
     }
   }
 
@@ -18,7 +18,7 @@ class ArtistController {
       const result = await ArtistModel.findOne(id);
       return res.json(result);
     } catch (e) {
-      return res.json({message: e.message});
+      return res.status(404).json({message: e.message});
     }
   }
 
@@ -29,7 +29,7 @@ class ArtistController {
       const result = await ArtistModel.create(name);
       return res.json(result);
     } catch(e) {
-      return res.json({message: e.message});
+      return res.status(404).json({message: e.message});
     }
 
   }
@@ -43,7 +43,7 @@ class ArtistController {
       const result = await ArtistModel.findOneAndUpdate(id, name);
       return res.json(result);
     }  catch(e) {
-      return res.json({message: e.message});
+      return res.status(404).json({message: e.message});
     }
   }
 
@@ -54,7 +54,7 @@ class ArtistController {
       const result = await ArtistModel.findOneAndDelete(id);
       return res.json(result);
     } catch(e) {
-      return res.json({message: e.message});
+      return res.status(404).json({message: e.message});
     }
   }
 
