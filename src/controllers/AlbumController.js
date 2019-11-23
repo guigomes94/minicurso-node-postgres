@@ -1,16 +1,14 @@
 import pool from '../config/conn';
+import AlbumRepository from '../repository/AlbumRepository';
 
 class AlbumController {
   async index(req, res) {
-
+    
     try {
-      const result = await pool.query(`SELECT al.idalbum "id", a.name "artist",
-      g.name "gender", al.name , al.year FROM artist a, gender g, album al
-      WHERE a.idartist = al.idartist AND g.idgender = al.idgender;`);
-      res.status(200).send(result.rows);
-
-    } catch (err) {
-      res.status(400).send({ "erro": err.message });
+      const result = await AlbumRepository.findAll();
+      return res.json(result);
+    } catch(e) {
+      return res.status(404).json({message: e.message});
     }
     
   }
