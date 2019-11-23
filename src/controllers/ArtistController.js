@@ -1,13 +1,13 @@
-import ArtistModel from '../repository/ArtistModel';
+import ArtistRepository from '../repository/ArtistRepository';
 
 class ArtistController {
   async index(req, res) {
 
     try {
-      const result = await ArtistModel.findAll();
+      const result = await ArtistRepository.findAll();
       return res.json(result);
     } catch(e) {
-      return res.json({message: e.message});
+      return res.status(404).json({message: e.message});
     }
   }
 
@@ -15,10 +15,10 @@ class ArtistController {
     const { id } = req.params;
 
     try {
-      const result = await ArtistModel.findOne(id);
+      const result = await ArtistRepository.findOne(id);
       return res.json(result);
     } catch (e) {
-      return res.json({message: e.message});
+      return res.status(404).json({message: e.message});
     }
   }
 
@@ -26,10 +26,10 @@ class ArtistController {
     const { name } = req.body;
 
     try {
-      const result = await ArtistModel.create(name);
+      const result = await ArtistRepository.create(name);
       return res.json(result);
     } catch(e) {
-      return res.json({message: e.message});
+      return res.status(404).json({message: e.message});
     }
 
   }
@@ -40,10 +40,10 @@ class ArtistController {
     const { name } = req.body;
 
     try {
-      const result = await ArtistModel.findOneAndUpdate(id, name);
+      const result = await ArtistRepository.findOneAndUpdate(id, name);
       return res.json(result);
     }  catch(e) {
-      return res.json({message: e.message});
+      return res.status(404).json({message: e.message});
     }
   }
 
@@ -51,10 +51,10 @@ class ArtistController {
     const { id } = req.params;
 
     try {
-      const result = await ArtistModel.findOneAndDelete(id);
+      const result = await ArtistRepository.findOneAndDelete(id);
       return res.json(result);
     } catch(e) {
-      return res.json({message: e.message});
+      return res.status(404).json({message: e.message});
     }
   }
 
