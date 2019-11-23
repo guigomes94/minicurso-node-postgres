@@ -1,43 +1,37 @@
-import pool from '../config/conn';
+import MusicRepository from '../repository/MusicRepository';
+
 
 class MusicController {
   async index(req, res) {
 
     try {
-      const result = await pool.query(`SELECT m.idmusic, al.name "album", m.track,
-      m.name, m.time FROM music m, album al WHERE m.idalbum = al.idalbum;`);
-      res.status(200).send(result.rows);
-
-    } catch (err) {
-      res.status(400).send({ "erro": err.message });
+      const result = await MusicRepository.findAll();
+      return res.json(result);
+    } catch(e) {
+      return res.status(404).json({message: e.message});
     }
     
   }
 
   async show(req, res) {
     const { id } = req.params;
-
     try {
-      const result = await pool.query(`SELECT m.idmusic, al.name "album", m.track,
-      m.name, m.time FROM music m, album al
-      WHERE m.idalbum = al.idalbum AND idMusic = ${id}`);
-      res.status(200).send(result.rows);
-
-    } catch (err) {
-      res.status(400).send({ "erro": err.message });
+      const result = await MusicRepository.findByid(id);
+      return res.json(result);
+    } catch(e) {
+      return res.status(404).json({message: e.message});
     }
+
   }
 
   async store(req, res) {
     const { idalb, track, name, time } = req.body;
-
+    
     try {
-      await pool.query(`INSERT INTO Music VALUES(nextval('Music_idMusic_seq')
-      ,${idalb}, ${track},'${name}','${time}')`);
-      res.status(201).send({ message: "OK!" });
-      
-    } catch (err) {
-      res.status(404).send({ "erro": err.message });
+      const result = await MusicRepository.create(idalb, track, name, time);
+      return res.json(result);
+    } catch(e) {
+      return res.status(400).json({message: e.message});
     }
   }
 
@@ -46,26 +40,20 @@ class MusicController {
     const { idalb, track, name, time } = req.body;
 
     try {
-      await pool.query(`UPDATE Music SET idalbum = ${idalb},
-      track = ${track},
-      name = '${name}',
-      time = '${time}' WHERE idMusic = ${id}`);
-      res.status(200).send({ message: "OK!" });
-
-    } catch (err) {
-      res.status(404).send({ "erro": err.message });
-    } 
+      const result = await MusicRepository.findOneAndUpdate(id, idalb, track,name, time)
+      return res.json(result);
+    } catch(e) {
+      return res.status(400).json({message: e.message});
+    }
   }
 
   async destroy(req, res) {
     const { id } = req.params;
-
     try {
-      await pool.query(`DELETE FROM Music WHERE idMusic = ${id}`)
-      res.status(200).send({ message: "OK!" })
-
-    } catch (err) {
-      res.status(404).send({"erro": err.message});
+      const result = await MusicRepository.findOneAndDelete(id);
+      return res.json(result);
+    } catch(e) {
+      return res.status(404).json({message: e.message});
     }
   }
 

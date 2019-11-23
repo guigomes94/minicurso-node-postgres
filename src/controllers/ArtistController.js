@@ -29,7 +29,7 @@ class ArtistController {
       const result = await ArtistRepository.create(name);
       return res.json(result);
     } catch(e) {
-      return res.status(404).json({message: e.message});
+      return res.status(400).json({message: e.message});
     }
 
   }
@@ -43,7 +43,7 @@ class ArtistController {
       const result = await ArtistRepository.findOneAndUpdate(id, name);
       return res.json(result);
     }  catch(e) {
-      return res.status(404).json({message: e.message});
+      return res.status(400).json({message: e.message});
     }
   }
 
