@@ -61,7 +61,7 @@ export default class ArtistModel {
      * Delete um registro do banco
      * @param {* inteiro} id 
      */
-    static async findAndDelete(id) {
+    static async findOneAndDelete(id) {
         try {
             const result = await pool.query(`DELETE FROM artist WHERE idartist = ${id} RETURNING *`);
             if (result.rows.length > 0){
