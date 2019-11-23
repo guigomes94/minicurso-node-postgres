@@ -17,10 +17,30 @@ export default class ArtistModel {
      * recebe um id e procura o artista correspondente
      * @param {* inteiro} id 
      */
-    static async findOne(id) {
+    static async findById(id) {
         try {
             const result = await pool.query(`SELECT * FROM artist WHERE idartist = ${id}`);
-            return result.rows;
+            if (result.rows.length > 0) {
+                return result.rows[0];
+            } else {
+                throw new Error("Id does not exist");
+            }
+        } catch(e) {
+            throw e;
+        }
+    }
+    /**
+     * recebe um name e procura o artista correspondente
+     * @param {* strnameing} id 
+     */
+    static async findByName(name) {
+        try {
+            const result = await pool.query(`SELECT * FROM artist WHERE name = ${name}`);
+            if (result.rows.length > 0) {
+                return result.rows;
+            } else {
+                throw new Error("Name does not exist");
+            }
         } catch(e) {
             throw e;
         }

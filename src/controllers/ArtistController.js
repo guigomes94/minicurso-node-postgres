@@ -1,4 +1,4 @@
-import ArtistModel from '../repository/ArtistModel';
+import ArtistModel from '../repository/ArtistRepository';
 
 class ArtistController {
   async index(req, res) {
