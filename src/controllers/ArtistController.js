@@ -43,13 +43,6 @@ class ArtistController {
       return res.json({message: e.message});
     }
 
-    // try {
-    //   await pool.query(`INSERT INTO artist VALUES(nextval('artist_idartist_seq'),'${name}')`);
-    //   res.status(201).send({ message: "OK!" });
-      
-    // } catch (err) {
-    //   res.status(404).send({ "erro": err.message });
-    // }
   }
 
 
