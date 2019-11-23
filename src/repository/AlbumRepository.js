@@ -7,6 +7,7 @@ export default class AlbumRepository {
      */
     static async findAll() {
         try {
+            //TODO: Ajustar query para como estava antes.
             const result = await pool.query("SELECT * FROM album");
             return result.rows;
         } catch(e) {
@@ -102,5 +103,6 @@ export default class AlbumRepository {
             throw e;
         }
     }
+
     
 }
