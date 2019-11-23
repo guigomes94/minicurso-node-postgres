@@ -1,4 +1,3 @@
-import pool from '../config/conn';
 import AlbumRepository from '../repository/AlbumRepository';
 
 class AlbumController {
@@ -20,7 +19,7 @@ class AlbumController {
       const result = await AlbumRepository.findById(id);
       return res.json(result);
     } catch(e) {
-      return res.json({message: e.message});
+      return res.status(404).json({message: e.message});
     }
   }
 
@@ -31,7 +30,7 @@ class AlbumController {
       const result = await AlbumRepository.create(idart, idgd, name, year);
       return res.json(result);
     } catch(e) {
-      return res.json({message: e.message});
+      return res.status(400).json({message: e.message});
     }
 
   }
@@ -45,7 +44,7 @@ class AlbumController {
       const result = await AlbumRepository.findOneAndUpdate(id, idart, idgd, name, year);
       return res.json(result);
     } catch(e) {
-      return res.json({message: e.message});
+      return res.status(400).json({message: e.message});
     }
   }
 
@@ -56,7 +55,7 @@ class AlbumController {
       const result = await AlbumRepository.findOneAndDelete(id);
       return res.json(result);
     } catch(e) {
-      return res.json({message: e.message});
+      return res.status(404).json({message: e.message});
     }
   }
 
