@@ -8,7 +8,7 @@ export default class AlbumRepository {
     static async findAll() {
         try {
             //TODO: Ajustar query para como estava antes.
-            const result = await pool.query("SELECT * FROM album");
+            const result = await pool.query("SELECT al.idalbum album, al.name,a.name artist, g.name gender, al.year FROM album as al join artist as a on al.idartist = a.idartist join gender as g on al.idgender = g.idgender");
             return result.rows;
         } catch(e) {
             throw e;
@@ -24,9 +24,9 @@ export default class AlbumRepository {
      */
     static async create(idartist, idgender, name, year) {
         try {
-            const result = await pool.query("INSERT INTO album(idartist, idgender, name, year) VALUES($1, $2, $3, $4)", 
+            const result = await pool.query("INSERT INTO album(idartist, idgender, name, year) VALUES($1, $2, $3, $4) RETURNING *", 
                                             [idartist, idgender, name, year])
-            return result.rows.length > 0 ? result.rows[0] : {};
+            return result.rows[0];
         
         } catch(e) {
             throw e;
@@ -39,7 +39,7 @@ export default class AlbumRepository {
      */
     static async findById(id) {
         try {
-            const result = await pool.query(`SELECT * FROM album WHERE idalbum = ${id}`);
+            const result = await pool.query(`SELECT al.idalbum album, al.name,a.name artist, g.name gender, al.year FROM album as al join artist as a on al.idartist = a.idartist join gender as g on al.idgender = g.idgender WHERE al.idalbum = ${id}`);
             if (result.rows.length > 0) {
                 return result.rows[0];
             }
@@ -55,7 +55,7 @@ export default class AlbumRepository {
      */
     static async findByName(name) {
         try {
-            const result = await pool.query("SELECT * FROM album where name = $1", [name]);
+            const result = await pool.query("SELECT al.name,a.name artist, g.name gender, al.year FROM album as al join artist as a on al.idartist = a.idartist join gender as g on al.idgender = g.idgender WHERE al.name = $1", [name]);
             if (result.rows.length > 0) {
                 return result.rows[0];
             }
@@ -66,17 +66,14 @@ export default class AlbumRepository {
     }
 
     /**
-     * Acha um registro e atualiza o nome
+     * Delete o registro com base no id
      * @param {* inteiro} id 
-     * @param {* string} name 
      */
-    static async findOneAndDelete(id, name) {
+    static async findOneAndDelete(id) {
         try {
-            const result = await pool.query("UPDATE FROM album SET name = $1 WHERE idalbum = $2 RETURNING *", [name, id]);
-            if (result.rows.length > 0) {
-                return result.rows[0];
-            }
-            throw new Error(Constants.ID_NOT_FOUND);
+            const result = await pool.query(`DELETE FROM album WHERE idalbum = ${id} RETURNING *`);
+            
+            return result.rows[0];
         } catch(e) {
             throw e;
         }
@@ -84,7 +81,7 @@ export default class AlbumRepository {
 
         /**
      * Atualiza um album
-     * @param {* intiero} idalbum
+     * @param {* inteiro} idalbum
      * @param {* inteiro} idartist 
      * @param {* inteiro} idgender 
      * @param {* string} name 
@@ -92,7 +89,7 @@ export default class AlbumRepository {
      */
     static async findOneAndUpdate(idalbum, idartist, idgender, name, year) {
         try {
-            const result = await pool.query("UPDATE album SET idartist = $1, idgender = $2, name = $3, year = $4 where idalbum = $5", 
+            const result = await pool.query("UPDATE album SET idartist = $1, idgender = $2, name = $3, year = $4 where idalbum = $5 RETURNING *", 
                                             [idartist, idgender, name, year, idalbum])
             if (result.rows.length > 0) {
                 return result.rows[0];
