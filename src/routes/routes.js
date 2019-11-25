@@ -10,7 +10,7 @@ const routes = new Router();
 //CRUD (Create, Read, Update, Delete)
 // main
 routes.get("/", (req, res) => {
-  return res.json({ info: 'RESTful API Node.js + Express + Postgres'})
+  return res.json({ info: "RESTful API Node.js + Express + Postgres" });
 });
 
 // artist

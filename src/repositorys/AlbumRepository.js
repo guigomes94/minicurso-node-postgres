@@ -1,4 +1,4 @@
-import pool from '../config/conn';
+import pool from "../config/conn";
 import Constants from "../util/Constants";
 
 class AlbumRepository {
@@ -8,7 +8,6 @@ class AlbumRepository {
       g.name "gender", al.name , al.year FROM artist a, gender g, album al
       WHERE a.idartist = al.idartist AND g.idgender = al.idgender;`);
       return result.rows;
-  
     } catch (err) {
       throw err;
     }
@@ -23,10 +22,9 @@ class AlbumRepository {
         return result.rows;
       } else {
         throw new Error(Constants.ID_NOT_FOUND);
-      }   
-
+      }
     } catch (err) {
-        throw err;
+      throw err;
     }
   }
 
@@ -36,10 +34,10 @@ class AlbumRepository {
       ,${idart}, ${idgd},'${name}',${year})`);
       if (result) {
         result = Constants.CREATED;
-      } return result;
-      
+      }
+      return result;
     } catch (err) {
-        throw err;
+      throw err;
     }
   }
 
@@ -51,22 +49,22 @@ class AlbumRepository {
       year = ${year} WHERE idAlbum = ${id}`);
       if (result) {
         result = Constants.UPDATED;
-      } return result;
-
+      }
+      return result;
     } catch (err) {
-        throw err;
+      throw err;
     }
   }
 
   async findOneAndDelete(id) {
     try {
-      let result = await pool.query(`DELETE FROM Album WHERE idAlbum = ${id}`)
+      let result = await pool.query(`DELETE FROM Album WHERE idAlbum = ${id}`);
       if (result) {
         result = Constants.REMOVED;
-      } return result;
-
+      }
+      return result;
     } catch (err) {
-        throw err;
+      throw err;
     }
   }
 }

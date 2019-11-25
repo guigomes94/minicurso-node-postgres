@@ -1,12 +1,11 @@
-import pool from '../config/conn';
+import pool from "../config/conn";
 import Constants from "../util/Constants";
 
 class GenderRepository {
   async findAll() {
     try {
-      const result = await pool.query('SELECT * FROM Gender');
+      const result = await pool.query("SELECT * FROM Gender");
       return result.rows;
-  
     } catch (err) {
       throw err;
     }
@@ -14,15 +13,16 @@ class GenderRepository {
 
   async findOneById(id) {
     try {
-      const result = await pool.query(`SELECT * FROM Gender WHERE idGender = ${id}`);
+      const result = await pool.query(
+        `SELECT * FROM Gender WHERE idGender = ${id}`
+      );
       if (result.rows.length > 0) {
         return result.rows;
       } else {
         throw new Error(Constants.ID_NOT_FOUND);
-      }   
-
+      }
     } catch (err) {
-        throw err;
+      throw err;
     }
   }
 
@@ -32,10 +32,10 @@ class GenderRepository {
       VALUES(nextval('Gender_idGender_seq'),'${name}')`);
       if (result) {
         result = Constants.CREATED;
-      } return result;
-      
+      }
+      return result;
     } catch (err) {
-        throw err;
+      throw err;
     }
   }
 
@@ -45,22 +45,24 @@ class GenderRepository {
       WHERE idGender = ${id}`);
       if (result) {
         result = Constants.UPDATED;
-      } return result;
-
+      }
+      return result;
     } catch (err) {
-        throw err;
+      throw err;
     }
   }
 
   async findOneAndDelete(id) {
     try {
-      let result = await pool.query(`DELETE FROM Gender WHERE idGender = ${id}`)
+      let result = await pool.query(
+        `DELETE FROM Gender WHERE idGender = ${id}`
+      );
       if (result) {
         result = Constants.REMOVED;
-      } return result;
-
+      }
+      return result;
     } catch (err) {
-        throw err;
+      throw err;
     }
   }
 }

@@ -1,4 +1,4 @@
-import pool from '../config/conn';
+import pool from "../config/conn";
 import Constants from "../util/Constants";
 
 class MusicRepository {
@@ -7,7 +7,6 @@ class MusicRepository {
       const result = await pool.query(`SELECT m.idmusic, al.name "album", m.track,
       m.name, m.time FROM music m, album al WHERE m.idalbum = al.idalbum;`);
       return result.rows;
-  
     } catch (err) {
       throw err;
     }
@@ -22,10 +21,9 @@ class MusicRepository {
         return result.rows;
       } else {
         throw new Error(Constants.ID_NOT_FOUND);
-      }   
-
+      }
     } catch (err) {
-        throw err;
+      throw err;
     }
   }
 
@@ -35,10 +33,10 @@ class MusicRepository {
       ,${idalb}, ${track},'${name}','${time}')`);
       if (result) {
         result = Constants.CREATED;
-      } return result;
-      
+      }
+      return result;
     } catch (err) {
-        throw err;
+      throw err;
     }
   }
 
@@ -50,22 +48,22 @@ class MusicRepository {
       time = '${time}' WHERE idMusic = ${id}`);
       if (result) {
         result = Constants.UPDATED;
-      } return result;
-
+      }
+      return result;
     } catch (err) {
-        throw err;
+      throw err;
     }
   }
 
   async findOneAndDelete(id) {
     try {
-      let result = await pool.query(`DELETE FROM Music WHERE idMusic = ${id}`)
+      let result = await pool.query(`DELETE FROM Music WHERE idMusic = ${id}`);
       if (result) {
         result = Constants.REMOVED;
-      } return result;
-
+      }
+      return result;
     } catch (err) {
-        throw err;
+      throw err;
     }
   }
 }

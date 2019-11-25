@@ -2,15 +2,12 @@ import GenderRepository from "../repositorys/GenderRepository";
 
 class GenderController {
   async index(req, res) {
-
     try {
       const result = await GenderRepository.findAll();
       res.status(200).send(result);
-
     } catch (err) {
-      res.status(400).send({ "message": err.message });
+      res.status(400).send({ message: err.message });
     }
-    
   }
 
   async show(req, res) {
@@ -18,14 +15,12 @@ class GenderController {
     try {
       const result = await GenderRepository.findOneById(id);
       res.status(200).send(result);
-
     } catch (err) {
       if (err.message != "ID NOT FOUND!") {
-        res.status(400).send({ "message": err.message });
+        res.status(400).send({ message: err.message });
       } else {
-        res.status(404).send({ "message": err.message });
+        res.status(404).send({ message: err.message });
       }
-      
     }
   }
 
@@ -33,12 +28,10 @@ class GenderController {
     const { name } = req.body;
     try {
       const result = await GenderRepository.create(name);
-      res.status(201).send({"message": result});
-      
+      res.status(201).send({ message: result });
     } catch (err) {
-      res.status(404).send({ "message": err.message });
+      res.status(404).send({ message: err.message });
     }
-
   }
 
   async update(req, res) {
@@ -46,10 +39,9 @@ class GenderController {
     const { name } = req.body;
     try {
       const result = await GenderRepository.findOneAndUpdate(id, name);
-      res.status(200).send({"message": result});
-      
+      res.status(200).send({ message: result });
     } catch (err) {
-      res.status(404).send({ "message": err.message });
+      res.status(404).send({ message: err.message });
     }
   }
 
@@ -58,13 +50,11 @@ class GenderController {
 
     try {
       const result = await GenderRepository.findOneAndDelete(id);
-      res.status(200).send({ message: result })
-
+      res.status(200).send({ message: result });
     } catch (err) {
-      res.status(404).send({"message": err.message});
+      res.status(404).send({ message: err.message });
     }
   }
-
 }
 
 export default new GenderController();
