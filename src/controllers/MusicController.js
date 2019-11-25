@@ -1,15 +1,14 @@
-import pool from '../config/conn';
+import MusicRepository from "../repositorys/MusicRepository";
 
 class MusicController {
   async index(req, res) {
 
     try {
-      const result = await pool.query(`SELECT m.idmusic, al.name "album", m.track,
-      m.name, m.time FROM music m, album al WHERE m.idalbum = al.idalbum;`);
-      res.status(200).send(result.rows);
+      const result = await MusicRepository.findAll();
+      res.status(200).send(result);
 
     } catch (err) {
-      res.status(400).send({ "erro": err.message });
+      res.status(400).send({ "message": err.message });
     }
     
   }
@@ -18,13 +17,16 @@ class MusicController {
     const { id } = req.params;
 
     try {
-      const result = await pool.query(`SELECT m.idmusic, al.name "album", m.track,
-      m.name, m.time FROM music m, album al
-      WHERE m.idalbum = al.idalbum AND idMusic = ${id}`);
-      res.status(200).send(result.rows);
+      const result = await MusicRepository.findOneById(id);
+      res.status(200).send(result);
 
     } catch (err) {
-      res.status(400).send({ "erro": err.message });
+      if (err.message != "ID NOT FOUND!") {
+        res.status(400).send({ "message": err.message });
+      } else {
+        res.status(404).send({ "message": err.message });
+      }
+      
     }
   }
 
@@ -32,12 +34,11 @@ class MusicController {
     const { idalb, track, name, time } = req.body;
 
     try {
-      await pool.query(`INSERT INTO Music VALUES(nextval('Music_idMusic_seq')
-      ,${idalb}, ${track},'${name}','${time}')`);
-      res.status(201).send({ message: "OK!" });
+      const result = await MusicRepository.create(idalb, track, name, time);
+      res.status(201).send({"message": result});
       
     } catch (err) {
-      res.status(404).send({ "erro": err.message });
+      res.status(404).send({ "message": err.message });
     }
   }
 
@@ -46,26 +47,23 @@ class MusicController {
     const { idalb, track, name, time } = req.body;
 
     try {
-      await pool.query(`UPDATE Music SET idalbum = ${idalb},
-      track = ${track},
-      name = '${name}',
-      time = '${time}' WHERE idMusic = ${id}`);
-      res.status(200).send({ message: "OK!" });
-
+      const result = await MusicRepository.findOneAndUpdate(id, idalb, track, name, time);
+      res.status(200).send({"message": result});
+      
     } catch (err) {
-      res.status(404).send({ "erro": err.message });
-    } 
+      res.status(404).send({ "message": err.message });
+    }
   }
 
   async destroy(req, res) {
     const { id } = req.params;
 
     try {
-      await pool.query(`DELETE FROM Music WHERE idMusic = ${id}`)
-      res.status(200).send({ message: "OK!" })
+      const result = await MusicRepository.findOneAndDelete(id);
+      res.status(200).send({ message: result })
 
     } catch (err) {
-      res.status(404).send({"erro": err.message});
+      res.status(404).send({"message": err.message});
     }
   }
 

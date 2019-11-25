@@ -1,14 +1,14 @@
-import pool from '../config/conn';
+import GenderRepository from "../repositorys/GenderRepository";
 
 class GenderController {
   async index(req, res) {
 
     try {
-      const result = await pool.query('SELECT * FROM Gender');
-      res.status(200).send(result.rows);
+      const result = await GenderRepository.findAll();
+      res.status(200).send(result);
 
     } catch (err) {
-      res.status(400).send({ "erro": err.message });
+      res.status(400).send({ "message": err.message });
     }
     
   }
@@ -17,11 +17,16 @@ class GenderController {
     const { id } = req.params;
 
     try {
-      const result = await pool.query(`SELECT * FROM Gender WHERE idGender = ${id}`);
-      res.status(200).send(result.rows);
+      const result = await GenderRepository.findOneById(id);
+      res.status(200).send(result);
 
     } catch (err) {
-      res.status(400).send({ "erro": err.message });
+      if (err.message != "ID NOT FOUND!") {
+        res.status(400).send({ "message": err.message });
+      } else {
+        res.status(404).send({ "message": err.message });
+      }
+      
     }
   }
 
@@ -29,37 +34,36 @@ class GenderController {
     const { name } = req.body;
 
     try {
-      await pool.query(`INSERT INTO Gender VALUES(nextval('Gender_idGender_seq'),'${name}')`);
-      res.status(201).send({ message: "OK!" });
+      const result = await GenderRepository.create(name);
+      res.status(201).send({"message": result});
       
     } catch (err) {
-      res.status(404).send({ "erro": err.message });
+      res.status(404).send({ "message": err.message });
     }
   }
-
 
   async update(req, res) {
     const { id } = req.params;
     const { name } = req.body;
 
     try {
-      await pool.query(`UPDATE Gender SET name = '${name}' WHERE idGender = ${id}`);
-      res.status(200).send({ message: "OK!" });
-
+      const result = await GenderRepository.findOneAndUpdate(id, name);
+      res.status(200).send({"message": result});
+      
     } catch (err) {
-      res.status(404).send({ "erro": err.message });
-    } 
+      res.status(404).send({ "message": err.message });
+    }
   }
 
   async destroy(req, res) {
     const { id } = req.params;
 
     try {
-      await pool.query(`DELETE FROM Gender WHERE idGender = ${id}`)
-      res.status(200).send({ message: "OK!" })
+      const result = await GenderRepository.findOneAndDelete(id);
+      res.status(200).send({ message: result })
 
     } catch (err) {
-      res.status(404).send({"erro": err.message});
+      res.status(404).send({"message": err.message});
     }
   }
 

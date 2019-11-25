@@ -1,14 +1,14 @@
-import pool from '../config/conn';
+import ArtistRepository from "../repositorys/ArtistRepository";
 
 class ArtistController {
   async index(req, res) {
 
     try {
-      const result = await pool.query('SELECT * FROM artist');
-      res.status(200).send(result.rows);
+      const result = await ArtistRepository.findAll();
+      res.status(200).send(result);
 
     } catch (err) {
-      res.status(400).send({ "erro": err.message });
+      res.status(400).send({ "message": err.message });
     }
     
   }
@@ -17,11 +17,16 @@ class ArtistController {
     const { id } = req.params;
 
     try {
-      const result = await pool.query(`SELECT * FROM artist WHERE idartist = ${id}`);
-      res.status(200).send(result.rows);
+      const result = await ArtistRepository.findOneById(id);
+      res.status(200).send(result);
 
     } catch (err) {
-      res.status(400).send({ "erro": err.message });
+      if (err.message != "ID NOT FOUND!") {
+        res.status(400).send({ "message": err.message });
+      } else {
+        res.status(404).send({ "message": err.message });
+      }
+      
     }
   }
 
@@ -29,37 +34,36 @@ class ArtistController {
     const { name } = req.body;
 
     try {
-      await pool.query(`INSERT INTO artist VALUES(nextval('artist_idartist_seq'),'${name}')`);
-      res.status(201).send({ message: "OK!" });
+      const result = await ArtistRepository.create(name);
+      res.status(201).send({"message": result});
       
     } catch (err) {
-      res.status(404).send({ "erro": err.message });
+      res.status(404).send({ "message": err.message });
     }
   }
-
 
   async update(req, res) {
     const { id } = req.params;
     const { name } = req.body;
 
     try {
-      await pool.query(`UPDATE artist SET name = '${name}' WHERE idartist = ${id}`);
-      res.status(200).send({ message: "OK!" });
-
+      const result = await ArtistRepository.findOneAndUpdate(id, name);
+      res.status(200).send({"message": result});
+      
     } catch (err) {
-      res.status(404).send({ "erro": err.message });
-    } 
+      res.status(404).send({ "message": err.message });
+    }
   }
 
   async destroy(req, res) {
     const { id } = req.params;
 
     try {
-      await pool.query(`DELETE FROM artist WHERE idartist = ${id}`)
-      res.status(200).send({ message: "OK!" })
+      const result = await ArtistRepository.findOneAndDelete(id);
+      res.status(200).send({ message: result })
 
     } catch (err) {
-      res.status(404).send({"erro": err.message});
+      res.status(404).send({"message": err.message});
     }
   }
 

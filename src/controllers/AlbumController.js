@@ -1,16 +1,14 @@
-import pool from '../config/conn';
+import AlbumRepository from "../repositorys/AlbumRepository";
 
 class AlbumController {
   async index(req, res) {
 
     try {
-      const result = await pool.query(`SELECT al.idalbum "id", a.name "artist",
-      g.name "gender", al.name , al.year FROM artist a, gender g, album al
-      WHERE a.idartist = al.idartist AND g.idgender = al.idgender;`);
-      res.status(200).send(result.rows);
+      const result = await AlbumRepository.findAll();
+      res.status(200).send(result);
 
     } catch (err) {
-      res.status(400).send({ "erro": err.message });
+      res.status(400).send({ "message": err.message });
     }
     
   }
@@ -19,13 +17,16 @@ class AlbumController {
     const { id } = req.params;
 
     try {
-      const result = await pool.query(`SELECT al.idalbum "id", a.name "artist",
-      g.name "gender", al.name , al.year FROM artist a, gender g, album al
-      WHERE a.idartist = al.idartist AND g.idgender = al.idgender AND idalbum = ${id}`);
-      res.status(200).send(result.rows);
+      const result = await AlbumRepository.findOneById(id);
+      res.status(200).send(result);
 
     } catch (err) {
-      res.status(400).send({ "erro": err.message });
+      if (err.message != "ID NOT FOUND!") {
+        res.status(400).send({ "message": err.message });
+      } else {
+        res.status(404).send({ "message": err.message });
+      }
+      
     }
   }
 
@@ -33,41 +34,36 @@ class AlbumController {
     const { idart, idgd, name, year } = req.body;
 
     try {
-      await pool.query(`INSERT INTO Album VALUES(nextval('Album_idAlbum_seq')
-      ,${idart}, ${idgd},'${name}',${year})`);
-      res.status(201).send({ message: "OK!" });
+      const result = await AlbumRepository.create(idart, idgd, name, year);
+      res.status(201).send({"message": result});
       
     } catch (err) {
-      res.status(404).send({ "erro": err.message });
+      res.status(404).send({ "message": err.message });
     }
   }
-
 
   async update(req, res) {
     const { id } = req.params;
     const { idart, idgd, name, year } = req.body;
 
     try {
-      await pool.query(`UPDATE Album SET idartist = ${idart},
-      idgender = ${idgd},
-      name = '${name}',
-      year = ${year} WHERE idAlbum = ${id}`);
-      res.status(200).send({ message: "OK!" });
-
+      const result = await AlbumRepository.findOneAndUpdate(id, idart, idgd, name, year);
+      res.status(200).send({"message": result});
+      
     } catch (err) {
-      res.status(404).send({ "erro": err.message });
-    } 
+      res.status(404).send({ "message": err.message });
+    }
   }
 
   async destroy(req, res) {
     const { id } = req.params;
 
     try {
-      await pool.query(`DELETE FROM Album WHERE idAlbum = ${id}`)
-      res.status(200).send({ message: "OK!" })
+      const result = await AlbumRepository.findOneAndDelete(id);
+      res.status(200).send({ message: result })
 
     } catch (err) {
-      res.status(404).send({"erro": err.message});
+      res.status(404).send({"message": err.message});
     }
   }
 
