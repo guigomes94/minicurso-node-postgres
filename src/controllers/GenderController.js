@@ -1,22 +1,32 @@
+<<<<<<< HEAD
 import GenderRepository from "../repositorys/GenderRepository";
+=======
+import GenderRepository from '../repository/GenderRepository';
+>>>>>>> a054dc7fb596e5855cab63d0c370d13edaad9bc9
 
 class GenderController {
   async index(req, res) {
 
     try {
       const result = await GenderRepository.findAll();
+<<<<<<< HEAD
       res.status(200).send(result);
 
     } catch (err) {
       res.status(400).send({ "message": err.message });
+=======
+      return res.json(result);
+    } catch(e) {
+      return res.status(404).json({message: e.message});
+>>>>>>> a054dc7fb596e5855cab63d0c370d13edaad9bc9
     }
     
   }
 
   async show(req, res) {
     const { id } = req.params;
-
     try {
+<<<<<<< HEAD
       const result = await GenderRepository.findOneById(id);
       res.status(200).send(result);
 
@@ -27,31 +37,48 @@ class GenderController {
         res.status(404).send({ "message": err.message });
       }
       
+=======
+      const result = await GenderRepository.findById(id);
+      return res.json(result);
+    } catch(e) {
+      return res.status(404).json({message: e.message});
+>>>>>>> a054dc7fb596e5855cab63d0c370d13edaad9bc9
     }
   }
 
   async store(req, res) {
     const { name } = req.body;
-
     try {
       const result = await GenderRepository.create(name);
+<<<<<<< HEAD
       res.status(201).send({"message": result});
       
     } catch (err) {
       res.status(404).send({ "message": err.message });
+=======
+      return res.json(result);
+    } catch(e) {
+      return res.status(404).json({message: e.message});
+>>>>>>> a054dc7fb596e5855cab63d0c370d13edaad9bc9
     }
+
   }
 
   async update(req, res) {
     const { id } = req.params;
     const { name } = req.body;
-
     try {
       const result = await GenderRepository.findOneAndUpdate(id, name);
+<<<<<<< HEAD
       res.status(200).send({"message": result});
       
     } catch (err) {
       res.status(404).send({ "message": err.message });
+=======
+      return res.json(result);
+    } catch(e) {
+      return res.status(404).json({message: e.message});
+>>>>>>> a054dc7fb596e5855cab63d0c370d13edaad9bc9
     }
   }
 
@@ -60,10 +87,16 @@ class GenderController {
 
     try {
       const result = await GenderRepository.findOneAndDelete(id);
+<<<<<<< HEAD
       res.status(200).send({ message: result })
 
     } catch (err) {
       res.status(404).send({"message": err.message});
+=======
+      return res.json(result);
+    } catch(e) {
+      return res.status(404).json({message: e.message});
+>>>>>>> a054dc7fb596e5855cab63d0c370d13edaad9bc9
     }
   }
 
