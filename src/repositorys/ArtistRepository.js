@@ -26,43 +26,71 @@ class ArtistRepository {
     }
   }
 
-  async create(name) {
+  async findOneByName(name) {
     try {
-      let result = await pool.query(`INSERT INTO artist 
-      VALUES(nextval('artist_idartist_seq'),'${name}')`);
-      if (result) {
-        result = Constants.CREATED;
+      const result = await pool.query(
+        `SELECT * FROM artist WHERE name = '${name}'`
+      );
+      if (result.rows.length > 0) {
+        return result.rows;
+      } else {
+        return [];
       }
-      return result;
     } catch (err) {
       throw err;
+    }
+  }
+
+  async create(name) {
+    const exist = await this.findOneByName(name);
+    if (exist.length > 0) {
+      throw new Error(Constants.DUPLICATE);
+    } else {
+      try {
+        let result = await pool.query(`INSERT INTO artist 
+        VALUES(nextval('artist_idartist_seq'),'${name}')`);
+        if (result) {
+          result = Constants.CREATED;
+        }
+        return result;
+      } catch (err) {
+        throw err;
+      }
     }
   }
 
   async findOneAndUpdate(id, name) {
-    try {
-      let result = await pool.query(`UPDATE artist SET name = '${name}' 
-      WHERE idartist = ${id}`);
-      if (result) {
-        result = Constants.UPDATED;
+    const exist = await this.findOneById(id);
+    if (exist.length > 0) {
+      try {
+        let result = await pool.query(`UPDATE artist SET name = '${name}' 
+        WHERE idartist = ${id}`);
+        if (result) {
+          result = Constants.UPDATED;
+        }
+        return result;
+      } catch (err) {
+        throw err;
       }
-      return result;
-    } catch (err) {
-      throw err;
+    } else {
+      throw new Error(Constants.ID_NOT_FOUND);
     }
   }
 
   async findOneAndDelete(id) {
-    try {
-      let result = await pool.query(
-        `DELETE FROM artist WHERE idartist = ${id}`
-      );
-      if (result) {
-        result = Constants.REMOVED;
+    const exist = await this.findOneById(id);
+    if (exist.length > 0) {
+      try {
+        let result = await pool.query(`DELETE FROM artist WHERE idartist = ${id}`);
+        if (result) {
+          result = Constants.REMOVED;
+        }
+        return result;
+      } catch (err) {
+        throw err;
       }
-      return result;
-    } catch (err) {
-      throw err;
+    } else {
+      throw new Error(Constants.ID_NOT_FOUND);
     }
   }
 }
