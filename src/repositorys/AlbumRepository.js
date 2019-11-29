@@ -6,7 +6,7 @@ class AlbumRepository {
     try {
       const result = await pool.query(`SELECT al.idalbum "id", a.name "artist",
       g.name "gender", al.name , al.year FROM artist a, gender g, album al
-      WHERE a.idartist = al.idartist AND g.idgender = al.idgender;`);
+      WHERE a.idartist = al.idartist AND g.idgender = al.idgender`);
       return result.rows;
     } catch (err) {
       throw err;
